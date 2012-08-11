@@ -173,11 +173,13 @@ class LaunchForm(forms.SelfHandlingForm):
             # BEGIN
             # @defermat section modified here to have unique instance 
             #           names when launching multiple instances
-            if (int(data.get('count')) > 1):
-                i = 1
-                while(i<=int(data.get('count'))):
+            i = 1
+            while(i<=int(data.get('count'))):
+                if (int(data.get('count')) > 1):
                     name = data['name']+str(i)
-                    api.server_create(request,
+                else:
+                    name = data['name']
+                api.server_create(request,
                               name,
                               data['image_id'],
                               data['flavor'],
@@ -186,9 +188,9 @@ class LaunchForm(forms.SelfHandlingForm):
                               data.get('security_groups'),
                               dev_mapping,
                               instance_count=1)
-                    messages.success(request,
+                messages.success(request,
                          _('Instance "%s" launched.') % data["name"])
-                    i+=1
+                i+=1
             # END
             # @defermat
             #
